@@ -184,35 +184,148 @@ def server_component(guild: discord.Guild):
         else f"`{guild.owner_id}`"
     )
 
+    text_channels = len(guild.text_channels)
+    voice_channels = len(guild.voice_channels)
+    categories = len(guild.categories)
+    roles = len(guild.roles)
+
+    members = guild.member_count or 0
+
+    bots = 0
+    humans = 0
+
+    for member in guild.members:
+        if member.bot:
+            bots += 1
+        else:
+            humans += 1
+
+    verification_levels = {
+        discord.VerificationLevel.none: "None",
+        discord.VerificationLevel.low: "Low",
+        discord.VerificationLevel.medium: "Medium",
+        discord.VerificationLevel.high: "High",
+        discord.VerificationLevel.highest: "Very High"
+    }
+
+    verification = verification_levels.get(
+        guild.verification_level,
+        str(guild.verification_level)
+    )
+
+    features = ", ".join(
+        feature.replace("_", " ").title()
+        for feature in guild.features
+    )
+
+    if not features:
+        features = "None"
+
     view = discord.ui.LayoutView(timeout=None)
 
-    container = discord.ui.Container(
+    items = [
         discord.ui.TextDisplay(
             f"# {guild.name}"
-        ),
+        )
+    ]
+
+    if guild.icon:
+        items.append(
+            discord.ui.MediaGallery(
+                discord.MediaGalleryItem(
+                    media=guild.icon.url
+                )
+            )
+        )
+
+    items.extend([
+        discord.ui.Separator(),
+
         discord.ui.TextDisplay(
-            "**Server ID**\n"
+            "### Server Information\n\n"
+            f"**Server ID**\n"
             f"`{guild.id}`\n\n"
-            "**Owner**\n"
-            f"{owner}"
-        ),
-        discord.ui.Separator(),
-        discord.ui.TextDisplay(
-            f"**Members** `{guild.member_count}`\n"
-            f"**Channels** `{len(guild.channels)}`\n"
-            f"**Roles** `{len(guild.roles)}`\n"
-            f"**Boost Level** `{guild.premium_tier}`"
-        ),
-        discord.ui.Separator(),
-        discord.ui.TextDisplay(
-            "**Created**\n"
+            f"**Owner**\n"
+            f"{owner}\n\n"
+            f"**Created**\n"
             f"{discord.utils.format_dt(guild.created_at, 'F')}"
         ),
+
+        discord.ui.Separator(),
+
+        discord.ui.TextDisplay(
+            "### Members\n\n"
+            f"**Total Members**\n"
+            f"`{members}`\n\n"
+            f"**Humans**\n"
+            f"`{humans}`\n\n"
+            f"**Bots**\n"
+            f"`{bots}`"
+        ),
+
+        discord.ui.Separator(),
+
+        discord.ui.TextDisplay(
+            "### Channels\n\n"
+            f"**Text Channels**\n"
+            f"`{text_channels}`\n\n"
+            f"**Voice Channels**\n"
+            f"`{voice_channels}`\n\n"
+            f"**Categories**\n"
+            f"`{categories}`"
+        ),
+
+        discord.ui.Separator(),
+
+        discord.ui.TextDisplay(
+            "### Server Settings\n\n"
+            f"**Roles**\n"
+            f"`{roles}`\n\n"
+            f"**Boost Level**\n"
+            f"`{guild.premium_tier}`\n\n"
+            f"**Boosts**\n"
+            f"`{guild.premium_subscription_count}`\n\n"
+            f"**Verification Level**\n"
+            f"`{verification}`"
+        ),
+
+        discord.ui.Separator(),
+
+        discord.ui.TextDisplay(
+            "### Server Features\n\n"
+            f"`{features}`"
+        )
+    ])
+
+    container = discord.ui.Container(
+        *items,
+        accent_colour=discord.Colour.blurple()
     )
 
     view.add_item(container)
 
     return view
+
+
+@bot.tree.command(
+    name="serverinfo",
+    description="Show detailed information about the server"
+)
+async def serverinfo(
+    interaction: discord.Interaction
+):
+    if interaction.guild is None:
+        await interaction.response.send_message(
+            "This command can only be used in a server.",
+            ephemeral=True
+        )
+        return
+
+    await interaction.response.send_message(
+        view=server_component(
+            interaction.guild
+        )
+    )
 
 
 def avatar_component(user: discord.User):
