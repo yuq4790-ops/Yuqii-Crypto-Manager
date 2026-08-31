@@ -395,6 +395,117 @@ async def yuqii_serverinfo(interaction: discord.Interaction):
     )
 
 
+
+
+def roblox_tax_component(
+    robux: int,
+    tax: int,
+    after_tax: int
+):
+    view = discord.ui.LayoutView(timeout=None)
+
+    container = discord.ui.Container(
+        discord.ui.TextDisplay(
+            "# Roblox Tax Calculator"
+        ),
+        discord.ui.TextDisplay(
+            f"**Before Tax**\n"
+            f"`{robux:,} Robux`"
+        ),
+        discord.ui.Separator(),
+        discord.ui.TextDisplay(
+            f"**30% Tax**\n"
+            f"`{tax:,} Robux`"
+        ),
+        discord.ui.Separator(),
+        discord.ui.TextDisplay(
+            f"### After Tax\n"
+            f"**`{after_tax:,} Robux`**"
+        ),
+        accent_colour=discord.Colour.red()
+    )
+
+    view.add_item(container)
+    return view
+
+def eurusd_component(
+    eur: float,
+    usd: float,
+    rate: float
+):
+    view = discord.ui.LayoutView(timeout=None)
+
+    container = discord.ui.Container(
+        discord.ui.TextDisplay(
+            "# EUR → USD Converter"
+        ),
+        discord.ui.TextDisplay(
+            f"**EUR Amount**\n"
+            f"`€{eur:,.2f}`"
+        ),
+        discord.ui.Separator(),
+        discord.ui.TextDisplay(
+            f"**USD Amount**\n"
+            f"`${usd:,.2f}`"
+        ),
+        discord.ui.Separator(),
+        discord.ui.TextDisplay(
+            f"**Exchange Rate**\n"
+            f"`1 EUR = {rate:.4f} USD`"
+        ),
+        accent_colour=discord.Colour.green()
+    )
+
+    view.add_item(container)
+    return view
+
+
+def transaction_component(
+    txid: str,
+    total_input: float,
+    total_output: float,
+    ltc_eur: float,
+    ltc_usd: float,
+    block: str,
+    confirmations: int
+):
+    view = discord.ui.LayoutView(timeout=None)
+
+    container = discord.ui.Container(
+        discord.ui.TextDisplay(
+            "# Litecoin Transaction"
+        ),
+        discord.ui.TextDisplay(
+            f"**TXID**\n"
+            f"`{txid}`"
+        ),
+        discord.ui.Separator(),
+        discord.ui.TextDisplay(
+            f"**Input**\n"
+            f"`{total_input:.8f} LTC`\n\n"
+            f"**Output**\n"
+            f"`{total_output:.8f} LTC`"
+        ),
+        discord.ui.Separator(),
+        discord.ui.TextDisplay(
+            f"**LTC Value**\n"
+            f"`€{ltc_eur:,.2f}`\n"
+            f"`${ltc_usd:,.2f}`"
+        ),
+        discord.ui.Separator(),
+        discord.ui.TextDisplay(
+            f"**Block**\n"
+            f"`{block}`\n\n"
+            f"**Confirmations**\n"
+            f"`{confirmations}`"
+        ),
+        accent_colour=discord.Colour.gold()
+    )
+
+    view.add_item(container)
+    return view
+
+
 bot.tree.add_command(yuqii)
 
 if __name__ == "__main__":
