@@ -299,7 +299,7 @@ def server_component(guild: discord.Guild):
 
     container = discord.ui.Container(
         *items,
-        accent_colour=discord.Colour.blurple()
+        
     )
 
     view.add_item(container)
