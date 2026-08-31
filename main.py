@@ -96,7 +96,6 @@ def wallet_component(
             "### Wallet Address\n"
             f"`{address}`"
         ),
-        accent_colour=discord.Colour.gold()
     )
 
     view.add_item(container)
@@ -143,7 +142,6 @@ def transaction_component(
             "**Confirmations**\n"
             f"`{confirmations}`"
         ),
-        accent_colour=discord.Colour.gold()
     )
 
     view.add_item(container)
@@ -172,7 +170,6 @@ def user_component(user: discord.User):
             "**Avatar**\n"
             f"[Open Avatar]({user.display_avatar.url})"
         ),
-        accent_colour=discord.Colour.blurple()
     )
 
     view.add_item(container)
@@ -211,7 +208,6 @@ def server_component(guild: discord.Guild):
             "**Created**\n"
             f"{discord.utils.format_dt(guild.created_at, 'F')}"
         ),
-        accent_colour=discord.Colour.blurple()
     )
 
     view.add_item(container)
@@ -237,7 +233,6 @@ def avatar_component(user: discord.User):
             f"`{user.id}`\n\n"
             f"[Open Avatar]({user.display_avatar.url})"
         ),
-        accent_colour=discord.Colour.blurple()
     )
 
     view.add_item(container)
@@ -270,7 +265,6 @@ def roblox_tax_component(
             "### After Tax\n"
             f"**`{after_tax:,} Robux`**"
         ),
-        accent_colour=discord.Colour.red()
     )
 
     view.add_item(container)
@@ -303,7 +297,6 @@ def eurusd_component(
             "**Exchange Rate**\n"
             f"`1 EUR = {rate:.4f} USD`"
         ),
-        accent_colour=discord.Colour.green()
     )
 
     view.add_item(container)
