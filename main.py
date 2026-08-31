@@ -307,6 +307,28 @@ def server_component(guild: discord.Guild):
     return view
 
 
+class YuqiiBot(commands.Bot):
+    def __init__(self):
+        super().__init__(
+            command_prefix="!",
+            intents=intents
+        )
+
+    async def setup_hook(self):
+        synced = await self.tree.sync()
+        logging.info(
+            f"{len(synced)} global slash commands synchronized."
+        )
+
+    async def on_ready(self):
+        logging.info(
+            f"Bot online: {self.user} ({self.user.id})"
+        )
+
+
+bot = YuqiiBot()
+
+
 @bot.tree.command(
     name="serverinfo",
     description="Show detailed information about the server"
@@ -322,10 +344,9 @@ async def serverinfo(
         return
 
     await interaction.response.send_message(
-        view=server_component(
-            interaction.guild
-        )
+        view=server_component(interaction.guild)
     )
+
 
 
 def avatar_component(user: discord.User):
